@@ -1,10 +1,13 @@
 <main class="shell">
   <header class="top">
     <a class="mark" href="https://amolip.github.io">Amol</a>
-    <span>Slate</span>
+    <div class="top-actions">
+      <app-theme-toggle />
+      <span>Slate</span>
+    </div>
   </header>
 
-  <section class="auth">
+  <section class="auth panel reveal">
     <p class="eyebrow">Task dashboard</p>
     <h1>Keep the list short.</h1>
     <p class="lede">
@@ -14,28 +17,40 @@
     </p>
 
     <form (ngSubmit)="submit()">
-      <label *ngIf="mode === 'register'">
-        Name
-        <input name="name" [(ngModel)]="name" autocomplete="name" required>
-      </label>
       <label>
         Email
         <input name="email" type="email" [(ngModel)]="email" autocomplete="email" required>
       </label>
       <label>
         Password
-        <input name="password" type="password" [(ngModel)]="password" autocomplete="current-password" required minlength="6">
+        <span class="password-field">
+          <input
+            name="password"
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            autocomplete="current-password"
+            required
+            minlength="6"
+          >
+          <button
+            type="button"
+            class="text-btn password-toggle"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="showPassword"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </span>
       </label>
       <p class="error" *ngIf="error()">{{ error() }}</p>
-      <button class="btn btn-primary" type="submit" [disabled]="pending()">
-        {{ pending() ? 'Working…' : mode === 'login' ? 'Sign in' : 'Create account' }}
+      <button class="btn btn-primary" type="submit" [class.is-busy]="pending()" [disabled]="pending()">
+        {{ pending() ? 'Working' : 'Sign in' }}
       </button>
     </form>
 
     <p class="switch">
-      <button type="button" class="text-btn" (click)="mode = mode === 'login' ? 'register' : 'login'">
-        {{ mode === 'login' ? 'Need an account?' : 'Already have an account?' }}
-      </button>
+      <a class="text-btn" routerLink="/register">Need an account? Create one</a>
     </p>
     <p class="hint" *ngIf="!demo">Demo user: demo&#64;slate.app / slate1234</p>
   </section>

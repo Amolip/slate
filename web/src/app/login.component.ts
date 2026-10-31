@@ -2,21 +2,21 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth.service';
+import { ThemeToggleComponent } from './theme-toggle.component';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, ThemeToggleComponent],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
   readonly demo = environment.demo;
-  mode: 'login' | 'register' = 'login';
-  name = 'Amol';
   email = 'demo@slate.app';
   password = 'slate1234';
+  showPassword = false;
   error = signal('');
   pending = signal(false);
 
@@ -29,11 +29,7 @@ export class LoginComponent {
     this.error.set('');
     this.pending.set(true);
     try {
-      if (this.mode === 'register') {
-        await this.auth.register(this.name, this.email, this.password);
-      } else {
-        await this.auth.login(this.email, this.password);
-      }
+      await this.auth.login(this.email, this.password);
       await this.router.navigateByUrl('/board');
     } catch (err) {
       this.error.set(this.message(err));

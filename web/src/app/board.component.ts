@@ -5,10 +5,11 @@ import { environment } from '../environments/environment';
 import { AuthService } from './auth.service';
 import { Task } from './models';
 import { TasksService } from './tasks.service';
+import { ThemeToggleComponent } from './theme-toggle.component';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ThemeToggleComponent],
   templateUrl: './board.component.html',
 })
 export class BoardComponent implements OnInit {
@@ -24,6 +25,7 @@ export class BoardComponent implements OnInit {
   notes = '';
   error = signal('');
   loading = signal(true);
+  leavingId = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
     await this.refresh();
@@ -51,8 +53,11 @@ export class BoardComponent implements OnInit {
   }
 
   async remove(task: Task): Promise<void> {
+    this.leavingId.set(task.id);
+    await new Promise((resolve) => setTimeout(resolve, 220));
     await this.tasksApi.remove(task.id);
     this.tasks.update((list) => list.filter((item) => item.id !== task.id));
+    this.leavingId.set(null);
   }
 
   signOut(): void {
