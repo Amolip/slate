@@ -1,0 +1,46 @@
+<main class="shell">
+  <header class="top">
+    <div>
+      <p class="mark">Slate</p>
+      <p class="muted">{{ user()?.name }} · {{ openCount() }} open</p>
+    </div>
+    <button class="text-btn" type="button" (click)="signOut()">Sign out</button>
+  </header>
+
+  <p class="banner" *ngIf="demo">
+    Live demo — tasks stay in this browser. Clone the repo to run the NestJS API.
+  </p>
+
+  <section class="composer">
+    <form (ngSubmit)="add()">
+      <label>
+        New task
+        <input name="title" [(ngModel)]="title" placeholder="What needs doing?" required>
+      </label>
+      <label>
+        Note
+        <input name="notes" [(ngModel)]="notes" placeholder="Optional detail">
+      </label>
+      <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+  </section>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+  <p class="muted" *ngIf="loading()">Loading…</p>
+
+  <ul class="tasks" *ngIf="!loading()">
+    <li *ngIf="tasks().length === 0" class="empty">
+      Nothing here yet. Add a first task.
+    </li>
+    <li *ngFor="let task of tasks()" [class.done]="task.done">
+      <button class="check" type="button" (click)="toggle(task)" [attr.aria-pressed]="task.done">
+        <span class="sr-only">{{ task.done ? 'Mark open' : 'Mark done' }}</span>
+      </button>
+      <div>
+        <p class="task-title">{{ task.title }}</p>
+        <p class="muted" *ngIf="task.notes">{{ task.notes }}</p>
+      </div>
+      <button class="text-btn" type="button" (click)="remove(task)">Remove</button>
+    </li>
+  </ul>
+</main>

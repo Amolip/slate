@@ -1,0 +1,10 @@
+{
+  "name": "slate",
+  "private": true,
+  "description": "Personal task dashboard — Angular frontend, NestJS API",
+  "scripts": {
+    "api": "npm run start:dev --prefix api",
+    "web": "npm start --prefix web -- --port 4200",
+    "build:web": "npm run build --prefix web -- --base-href /slate/"
+  }
+}

@@ -1,0 +1,42 @@
+<main class="shell">
+  <header class="top">
+    <a class="mark" href="https://amolip.github.io">Amol</a>
+    <span>Slate</span>
+  </header>
+
+  <section class="auth">
+    <p class="eyebrow">Task dashboard</p>
+    <h1>Keep the list short.</h1>
+    <p class="lede">
+      Sign in to add, complete, and clear tasks.
+      <span *ngIf="demo"> This live demo stores data in your browser.</span>
+      <span *ngIf="!demo"> The NestJS API holds the session and tasks.</span>
+    </p>
+
+    <form (ngSubmit)="submit()">
+      <label *ngIf="mode === 'register'">
+        Name
+        <input name="name" [(ngModel)]="name" autocomplete="name" required>
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" [(ngModel)]="email" autocomplete="email" required>
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" [(ngModel)]="password" autocomplete="current-password" required minlength="6">
+      </label>
+      <p class="error" *ngIf="error()">{{ error() }}</p>
+      <button class="btn btn-primary" type="submit" [disabled]="pending()">
+        {{ pending() ? 'Working…' : mode === 'login' ? 'Sign in' : 'Create account' }}
+      </button>
+    </form>
+
+    <p class="switch">
+      <button type="button" class="text-btn" (click)="mode = mode === 'login' ? 'register' : 'login'">
+        {{ mode === 'login' ? 'Need an account?' : 'Already have an account?' }}
+      </button>
+    </p>
+    <p class="hint" *ngIf="!demo">Demo user: demo&#64;slate.app / slate1234</p>
+  </section>
+</main>
